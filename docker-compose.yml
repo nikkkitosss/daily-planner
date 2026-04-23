@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: file:./prisma/dev.db
+      CORS_ORIGIN: http://localhost:5173
+    volumes:
+      - backend-data:/app/prisma
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend-data:
