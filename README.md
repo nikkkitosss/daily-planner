@@ -1,4 +1,4 @@
-# Daily Planner Monorepo
+# Daily Planner
 
 Full-stack daily planning application with authentication, tasks, tags, events, reminders, and calendar UI.
 
@@ -114,11 +114,3 @@ Backend API details and endpoint list:
 Frontend setup details:
 
 - See frontend/README.md
-
-## Test Data
-
-Pre-made test events are available in:
-
-- test-data/events.sample.json
-
-You can use them as request bodies for `POST /events` (authorized route).
