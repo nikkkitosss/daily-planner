@@ -13,6 +13,12 @@ export type SafeUser = {
 export type AuthResponse = {
   user: SafeUser;
   accessToken: string;
+  refreshToken: string;
+};
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
 };
 
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";

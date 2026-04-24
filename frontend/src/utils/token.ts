@@ -1,4 +1,5 @@
 const TOKEN_KEY = "daily_planner_access_token";
+const REFRESH_TOKEN_KEY = "daily_planner_refresh_token";
 
 export const tokenStore = {
   get(): string | null {
@@ -9,5 +10,17 @@ export const tokenStore = {
   },
   clear(): void {
     localStorage.removeItem(TOKEN_KEY);
+  },
+};
+
+export const refreshTokenStore = {
+  get(): string | null {
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
+  },
+  set(token: string): void {
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  },
+  clear(): void {
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
   },
 };

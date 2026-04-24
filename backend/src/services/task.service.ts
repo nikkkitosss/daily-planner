@@ -91,13 +91,11 @@ export const getTasksWithFilters = async (
           {
             title: {
               contains: filters.search,
-              mode: "insensitive" as const,
             },
           },
           {
             description: {
               contains: filters.search,
-              mode: "insensitive" as const,
             },
           },
         ]

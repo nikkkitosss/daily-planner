@@ -9,8 +9,10 @@ Production-ready backend API built with Node.js, Express, TypeScript, Prisma ORM
 - Prisma ORM
 - SQLite
 - JWT (access token)
+- JWT (access + refresh tokens)
 - bcryptjs
 - zod validation
+- nodemailer (SMTP reminder emails)
 
 ## Project Structure
 
@@ -96,7 +98,14 @@ PORT=4000
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="replace_with_a_secure_random_secret"
 JWT_EXPIRES_IN="1d"
+JWT_REFRESH_EXPIRES_IN="7d"
 CORS_ORIGIN="*"
+SMTP_HOST=""
+SMTP_PORT=587
+SMTP_AUTH_USER=""
+SMTP_AUTH_PASS=""
+SENDER_EMAIL=""
+REMINDER_POLL_INTERVAL_MS=30000
 ```
 
 ## Setup Instructions
@@ -141,7 +150,7 @@ npm start
 ## Authentication Flow
 
 1. `POST /auth/register` or `POST /auth/login`
-2. Receive `accessToken`
+2. Receive `accessToken` and `refreshToken`
 3. Use header for protected routes:
 
 ```http
@@ -154,6 +163,7 @@ Authorization: Bearer <accessToken>
 
 - `POST /auth/register`
 - `POST /auth/login`
+- `POST /auth/refresh`
 - `GET /auth/me`
 
 ### USERS

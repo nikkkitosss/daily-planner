@@ -1,7 +1,11 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../prisma/client";
 import { ApiError } from "../utils/apiError";
-import { signAccessToken } from "../utils/jwt";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt";
 import { toSafeUser } from "../utils/sanitize";
 
 export const registerUser = async (data: {
@@ -27,11 +31,13 @@ export const registerUser = async (data: {
     },
   });
 
-  const token = signAccessToken(user.id, user.email);
+  const accessToken = signAccessToken(user.id, user.email);
+  const refreshToken = signRefreshToken(user.id, user.email);
 
   return {
     user: toSafeUser(user),
-    accessToken: token,
+    accessToken,
+    refreshToken,
   };
 };
 
@@ -50,11 +56,39 @@ export const loginUser = async (data: { email: string; password: string }) => {
     throw new ApiError(401, "Invalid email or password");
   }
 
-  const token = signAccessToken(user.id, user.email);
+  const accessToken = signAccessToken(user.id, user.email);
+  const refreshToken = signRefreshToken(user.id, user.email);
 
   return {
     user: toSafeUser(user),
-    accessToken: token,
+    accessToken,
+    refreshToken,
+  };
+};
+
+export const refreshSession = async (refreshToken: string) => {
+  let payload;
+
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch {
+    throw new ApiError(401, "Invalid or expired refresh token");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: payload.sub },
+  });
+
+  if (!user) {
+    throw new ApiError(401, "Invalid or expired refresh token");
+  }
+
+  const nextAccessToken = signAccessToken(user.id, user.email);
+  const nextRefreshToken = signRefreshToken(user.id, user.email);
+
+  return {
+    accessToken: nextAccessToken,
+    refreshToken: nextRefreshToken,
   };
 };
 

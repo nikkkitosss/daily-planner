@@ -93,6 +93,9 @@
                   "if (json.accessToken) {",
                   "  pm.environment.set('accessToken', json.accessToken);",
                   "}",
+                  "if (json.refreshToken) {",
+                  "  pm.environment.set('refreshToken', json.refreshToken);",
+                  "}",
                   "if (json.user && json.user.id) {",
                   "  pm.environment.set('userId', json.user.id);",
                   "}"
@@ -140,8 +143,58 @@
                   "if (json.accessToken) {",
                   "  pm.environment.set('accessToken', json.accessToken);",
                   "}",
+                  "if (json.refreshToken) {",
+                  "  pm.environment.set('refreshToken', json.refreshToken);",
+                  "}",
                   "if (json.user && json.user.id) {",
                   "  pm.environment.set('userId', json.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/auth/refresh",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "if (json.accessToken) {",
+                  "  pm.environment.set('accessToken', json.accessToken);",
+                  "}",
+                  "if (json.refreshToken) {",
+                  "  pm.environment.set('refreshToken', json.refreshToken);",
                   "}"
                 ]
               }

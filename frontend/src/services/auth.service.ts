@@ -1,5 +1,5 @@
 import { api } from "./http";
-import { AuthResponse, SafeUser } from "../types/api";
+import { AuthResponse, RefreshResponse, SafeUser } from "../types/api";
 
 export const authService = {
   async register(input: {
@@ -22,5 +22,12 @@ export const authService = {
   async me(): Promise<SafeUser> {
     const { data } = await api.get<{ user: SafeUser }>("/auth/me");
     return data.user;
+  },
+
+  async refresh(refreshToken: string): Promise<RefreshResponse> {
+    const { data } = await api.post<RefreshResponse>("/auth/refresh", {
+      refreshToken,
+    });
+    return data;
   },
 };
